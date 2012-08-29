@@ -60,7 +60,7 @@ MAVEN_URL="http://devcctrl.com.packages.s3.amazonaws.com/maven.tar.gz"
 echo "-->MAVEN_URL: " $MAVEN_URL
 
 if [ ! -d .maven ]; then
-  echo -n "-----> Installing Maven 3.0.3..."
+  echo -n "-----> Installing Maven 3.0.4..."
   curl --silent --max-time 60 --location $MAVEN_URL | tar xz
   chmod +x .maven/bin/mvn
   echo " done"
