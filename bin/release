@@ -8,6 +8,8 @@ if [ -d ${BUILD_DIR}/.jdk ]; then
   JAVA_PATH="/app/.jdk/bin:"
 fi
 
+echo "--> Release"
+
 cat <<EOF
 ---
 config_vars:
