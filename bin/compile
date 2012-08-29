@@ -5,7 +5,7 @@
 set -e
 
 JVM_BUILDPACK_COMMON="http://heroku-jvm-common.s3.amazonaws.com/jvm-buildpack-common.tar.gz"
-echo "-->JVM_BUILDPACK_COMMON defined"
+echo "-->JVM_BUILDPACK_COMMON: " $JVM_BUILDPACK_COMMON
 logger -p user.notice -t "slugc[$$]" "language_pack_java java_compile_start"
 
 BIN_DIR=$(cd $(dirname $0); pwd) # absolute path
@@ -13,8 +13,8 @@ BIN_DIR=$(cd $(dirname $0); pwd) # absolute path
 BUILD_DIR=$1
 CACHE_DIR=$2
 LOGGER_FLAGS=""
-echo "-->BUILD_DIR" $BUILD_DIR
-echo "-->CACHE_DIR" $CACHE_DIR
+echo "-->BUILD_DIR: " $BUILD_DIR
+echo "-->CACHE_DIR: " $CACHE_DIR
 
 curl --silent --location $JVM_BUILDPACK_COMMON | tar xz
 . bin/java
@@ -56,7 +56,7 @@ if [ "true" == ${DOWNLOAD_JDK} ]; then
 fi
 
 # install maven with base repository
-MAVEN_URL="http://s3.amazonaws.com/heroku-jvm-langpack-java/maven.tar.gz"
+MAVEN_URL="http://devcctrl.com.packages.s3.amazonaws.com/maven.tar.gz"
 
 if [ ! -d .maven ]; then
   echo -n "-----> Installing Maven 3.0.3..."
@@ -65,7 +65,7 @@ if [ ! -d .maven ]; then
   echo " done"
 fi
 
-MAVEN_SETTINGS_URL="http://s3.amazonaws.com/heroku-jvm-langpack-java/settings.xml"
+MAVEN_SETTINGS_URL="http://devcctrl.com.packages.s3.amazonaws.com/settings.xml"
 
 if [ -f $BUILD_DIR/settings.xml ]; then
   echo -n "-----> Installing local settings.xml..."
