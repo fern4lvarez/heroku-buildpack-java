@@ -13,8 +13,8 @@ BIN_DIR=$(cd $(dirname $0); pwd) # absolute path
 BUILD_DIR=$1
 CACHE_DIR=$2
 LOGGER_FLAGS=""
-echo "-->BUILD_DIR: " $BUILD_DIR
-echo "-->CACHE_DIR: " $CACHE_DIR
+echo "--->BUILD_DIR: " $BUILD_DIR
+echo "--->CACHE_DIR: " $CACHE_DIR
 
 curl --silent --location $JVM_BUILDPACK_COMMON_URL | tar xz
 . bin/java
@@ -57,7 +57,7 @@ fi
 
 # install maven with base repository
 MAVEN_URL="http://devcctrl.com.packages.s3.amazonaws.com/maven.tar.gz"
-echo "-->MAVEN_URL: " $MAVEN_URL
+echo "--->MAVEN_URL: " $MAVEN_URL
 
 if [ ! -d .maven ]; then
   echo -n "-----> Installing Maven 3.0.4..."
@@ -67,7 +67,7 @@ if [ ! -d .maven ]; then
 fi
 
 MAVEN_SETTINGS_URL="http://devcctrl.com.packages.s3.amazonaws.com/settings.xml"
-echo "-->MAVEN_SETTINGS_URL: " $MAVEN_SETTINGS_URL
+echo "--->MAVEN_SETTINGS_URL: " $MAVEN_SETTINGS_URL
 
 if [ -f $BUILD_DIR/settings.xml ]; then
   echo -n "-----> Installing local settings.xml..."
