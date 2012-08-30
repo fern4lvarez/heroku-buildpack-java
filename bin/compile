@@ -4,7 +4,7 @@
 # fail fast
 set -e
 
-JVM_BUILDPACK_COMMON_URL="http://heroku-jvm-common.s3.amazonaws.com/jvm-buildpack-common.tar.gz"
+JVM_BUILDPACK_COMMON_URL="http://devcctrl.com.packages.s3.amazonaws.com/jvm-buildpack-common.tar.gz"
 echo "-->JVM_BUILDPACK_COMMON: " $JVM_BUILDPACK_COMMON_URL
 logger -p user.notice -t "slugc[$$]" "language_pack_java java_compile_start"
 
