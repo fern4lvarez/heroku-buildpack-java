@@ -2,7 +2,7 @@ Heroku buildpack: Java
 =========================
 
 This is a [Heroku buildpack](http://devcenter.heroku.com/articles/buildpack) for Java apps.
-It uses Maven 3.0.4 to build your application and OpenJDK 1.6.0_20 to run it.
+It uses Maven 3.0.3 to build your application and OpenJDK 1.6.0_20 to run it.
 
 Usage
 -----
@@ -10,22 +10,17 @@ Usage
 Example usage:
 
     $ ls
-    Procfile  pom.xml  src ...
+    Procfile  pom.xml  src
 
-    $ heroku create --stack cedar --buildpack http://github.com/fern4lvarez/heroku-buildpack-java.git
+    $ heroku create --stack cedar --buildpack http://github.com/heroku/heroku-buildpack-java.git
 
     $ git push heroku master
     ...
     -----> Heroku receiving push
     -----> Fetching custom language pack... done
-<<<<<<< HEAD
-    -----> Java and Maven app detected
-    -----> Installing Maven 3.0.4... done
-=======
     -----> Java app detected
     -----> Installing OpenJDK 1.6... done
     -----> Installing Maven 3.0.3... done
->>>>>>> upstream/master
     -----> Installing settings.xml... done
     -----> executing /app/tmp/repo.git/.cache/.maven/bin/mvn -B -Duser.home=/tmp/build_19z6l4hp57wqm -Dmaven.repo.local=/app/tmp/repo.git/.cache/.m2/repository -s /app/tmp/repo.git/.cache/.m2/settings.xml -DskipTests=true clean install
            [INFO] Scanning for projects...

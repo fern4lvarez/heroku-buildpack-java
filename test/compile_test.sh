@@ -22,11 +22,7 @@ testCompileWithVendorFlagGetsSystemProperties() {
   assertCaptured "executing $CACHE_DIR/.maven/bin/mvn -B -Duser.home=$BUILD_DIR -Dmaven.repo.local=$CACHE_DIR/.m2/repository -s $CACHE_DIR/.m2/settings.xml -DskipTests=true clean install"
   assertCaptured "s3pository.heroku.com" 
   assertCaptured "BUILD SUCCESS" 
-<<<<<<< HEAD
-  assertCaptured "Installing OpenJDK"
-=======
   assertCaptured "Installing OpenJDK 1.6"
->>>>>>> upstream/master
   assertTrue "Java should be present in runtime." "[ -d ${BUILD_DIR}/.jdk ]"
   assertTrue "Java version file should be present." "[ -f ${BUILD_DIR}/.jdk/version ]"
   assertTrue "System properties file should be present in build dir." "[ -f ${BUILD_DIR}/system.properties ]"

@@ -4,8 +4,6 @@
 # fail fast
 set -e
 
-JVM_BUILDPACK_COMMON_URL="http://devcctrl.com.packages.s3.amazonaws.com/jvm-buildpack-common.tar.gz"
-echo "-->JVM_BUILDPACK_COMMON: " $JVM_BUILDPACK_COMMON_URL
 logger -p user.notice -t "slugc[$$]" "language_pack_java java_compile_start"
 
 BIN_DIR=$(cd $(dirname $0); pwd) # absolute path
@@ -13,10 +11,8 @@ BIN_DIR=$(cd $(dirname $0); pwd) # absolute path
 BUILD_DIR=$1
 CACHE_DIR=$2
 LOGGER_FLAGS=""
-echo "--->BUILD_DIR: " $BUILD_DIR
-echo "--->CACHE_DIR: " $CACHE_DIR
 
-curl --silent --location $JVM_BUILDPACK_COMMON_URL | tar xz
+curl --silent --location http://heroku-jvm-common.s3.amazonaws.com/jvm-buildpack-common.tar.gz | tar xz
 . bin/java
 
 KEEP_M2_CACHE="true"
@@ -48,22 +44,10 @@ fi
 #create the cache dir if it doesn't exist
 mkdir -p $CACHE_DIR
 
-<<<<<<< HEAD
-# change to cache dir to install maven
-cd $CACHE_DIR
-
-# install JDK if it's a new app or is already using the vendored JDK
-if [ "true" == ${DOWNLOAD_JDK} ]; then
-  logger -p user.notice -t "slugc[$$]" "language_pack_java download_jdk-6"
-  LOGGER_FLAGS="$LOGGER_FLAGS download_jdk-6"
-  # echo -n "-----> Installing OpenJDK 1.6.0_25..."
-  # install_java ${BUILD_DIR}
-=======
 # install JDK 
 if [ -f ${BUILD_DIR}/system.properties ]; then
   logger -p user.notice -t "slugc[$$]" "language_pack_java download_jdk"
   LOGGER_FLAGS="$LOGGER_FLAGS download_jdk"
->>>>>>> upstream/master
   javaVersion=$(detect_java_version ${BUILD_DIR})
   echo -n "-----> Installing OpenJDK ${javaVersion}..."
   install_java ${BUILD_DIR} ${javaVersion}
@@ -75,28 +59,23 @@ fi
 cd $CACHE_DIR
 
 # install maven with base repository
-MAVEN_URL="http://devcctrl.com.packages.s3.amazonaws.com/maven.tar.gz"
-echo "--->MAVEN_URL: " $MAVEN_URL
+MAVEN_URL="http://s3.amazonaws.com/heroku-jvm-langpack-java/maven.tar.gz"
 
 if [ ! -d .maven ]; then
-  echo -n "-----> Installing Maven 3.0.4..."
+  echo -n "-----> Installing Maven 3.0.3..."
   curl --silent --max-time 60 --location $MAVEN_URL | tar xz
   chmod +x .maven/bin/mvn
   echo " done"
 fi
 
-MAVEN_SETTINGS_URL="http://devcctrl.com.packages.s3.amazonaws.com/settings.xml"
-echo "--->MAVEN_SETTINGS_URL: " $MAVEN_SETTINGS_URL
+MAVEN_SETTINGS_URL="http://s3.amazonaws.com/heroku-jvm-langpack-java/settings.xml"
 
-if [ -f $BUILD_DIR/settings.xml ]; then
-  echo -n "-----> Installing local settings.xml..."
-  cp $BUILD_DIR/settings.xml .m2/settings.xml
-  echo " done"
-else
-  echo -n "-----> Installing default settings.xml..."
-  curl --silent --max-time 10 --location $MAVEN_SETTINGS_URL --output .m2/settings.xml
-  echo " done"
+echo -n "-----> Installing settings.xml..."
+if [ -f .m2/settings.xml ]; then
+  rm .m2/settings.xml 
 fi
+curl --silent --max-time 10 --location $MAVEN_SETTINGS_URL --output .m2/settings.xml
+echo " done"
 
 # change to build dir to run maven
 cd $BUILD_DIR

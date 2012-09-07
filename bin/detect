@@ -2,7 +2,7 @@
 # bin/use <build-dir>
 
 if [ -f $1/pom.xml ]; then
-   echo "Java and Maven" && exit 0
+   echo "Java" && exit 0
 else
-  echo "No" && exit 1
+  echo "no" && exit 1
 fi

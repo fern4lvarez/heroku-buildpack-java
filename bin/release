@@ -3,16 +3,6 @@
 
 BUILD_DIR=$1
 
-<<<<<<< HEAD
-JAVA_PATH=""
-if [ -d ${BUILD_DIR}/.jdk ]; then
-  JAVA_PATH="/app/.jdk/bin:"
-fi
-
-echo "--> Release"
-
-=======
->>>>>>> upstream/master
 cat <<EOF
 ---
 config_vars:
