@@ -2,7 +2,7 @@
 
 . ${BUILDPACK_TEST_RUNNER_HOME}/lib/test_utils.sh
 
-testDownloadFlagIsUsedWhenVendoredFileIsPresent() {
+testCompileWithVendorFlagGetsSystemProperties() {
   mkdir -p ${CACHE_DIR}/.jdk
   touch ${CACHE_DIR}/.jdk/vendor
   
@@ -22,9 +22,39 @@ testDownloadFlagIsUsedWhenVendoredFileIsPresent() {
   assertCaptured "executing $CACHE_DIR/.maven/bin/mvn -B -Duser.home=$BUILD_DIR -Dmaven.repo.local=$CACHE_DIR/.m2/repository -s $CACHE_DIR/.m2/settings.xml -DskipTests=true clean install"
   assertCaptured "s3pository.heroku.com" 
   assertCaptured "BUILD SUCCESS" 
+<<<<<<< HEAD
   assertCaptured "Installing OpenJDK"
+=======
+  assertCaptured "Installing OpenJDK 1.6"
+>>>>>>> upstream/master
   assertTrue "Java should be present in runtime." "[ -d ${BUILD_DIR}/.jdk ]"
   assertTrue "Java version file should be present." "[ -f ${BUILD_DIR}/.jdk/version ]"
+  assertTrue "System properties file should be present in build dir." "[ -f ${BUILD_DIR}/system.properties ]"
+  assertTrue "System properties file should be present in cache." "[ -f ${CACHE_DIR}/system.properties ]"
+}
+
+testExistingAppDoesNotDownloadJDK() {
+  mkdir -p ${CACHE_DIR}
+  createPom "$(withDependency)"
+  compile
+  assertCapturedSuccess
+  assertNotCaptured "Installing OpenJDK"
+  assertTrue "Vendor file should not be present in build dir." "[ ! -f ${BUILD_DIR}/.jdk/vendor ]"
+  assertTrue "Vendor file should not be present in cache dir." "[ ! -f ${CACHE_DIR}/.jdk/vendor ]"
+  assertTrue "System properties file should not be present in build dir." "[ ! -f ${BUILD_DIR}/system.properties ]"
+  assertTrue "System properties file should not be present in cache dir." "[ ! -f ${CACHE_DIR}/system.properties ]"
+}
+
+testNewAppGetsSystemPropertiesFile() {
+  rm -rf ${CACHE_DIR}
+  createPom "$(withDependency)"
+  compile
+  assertCapturedSuccess
+  assertCaptured "Installing OpenJDK"
+  assertTrue "Vendor file should not be present in build dir." "[ ! -f ${BUILD_DIR}/.jdk/vendor ]"
+  assertTrue "Vendor file should not be present in cache dir." "[ ! -f ${CACHE_DIR}/.jdk/vendor ]"
+  assertTrue "System properties file should be present in build dir." "[ -f ${BUILD_DIR}/system.properties ]"
+  assertTrue "System properties file should be present in cache dir." "[ -f ${CACHE_DIR}/system.properties ]"
 }
 
 createPom()

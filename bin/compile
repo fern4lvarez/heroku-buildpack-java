@@ -20,18 +20,25 @@ curl --silent --location $JVM_BUILDPACK_COMMON_URL | tar xz
 . bin/java
 
 KEEP_M2_CACHE="true"
-DOWNLOAD_JDK="false"
 
-if [ ! -d $CACHE_DIR ]; then
-  logger -p user.notice -t "slugc[$$]" "language_pack_java new_java_app"
-  KEEP_M2_CACHE="false"
-  DOWNLOAD_JDK=$(is_flagged_for_download)
-elif [ -f $CACHE_DIR/removeM2Cache ]; then
-  KEEP_M2_CACHE="false"
+# create default system.properties for apps that had the jdk vendored in 
+if [ -f ${CACHE_DIR}/.jdk/vendor ] && [ ! -f ${BUILD_DIR}/system.properties ]; then
+  echo "java.runtime.version=1.6" > ${BUILD_DIR}/system.properties
 fi
 
-if [ -f ${CACHE_DIR}/.jdk/vendor ]; then
-  DOWNLOAD_JDK="true"
+if [ -f ${CACHE_DIR}/system.properties ] && [ ! -f ${BUILD_DIR}/system.properties ]; then
+  cp ${CACHE_DIR}/system.properties ${BUILD_DIR}/system.properties
+fi
+
+if [ ! -d $CACHE_DIR ]; then
+  LOGGER_FLAGS="$LOGGER_FLAGS new_java_app"
+  logger -p user.notice -t "slugc[$$]" "language_pack_java new_java_app"
+  KEEP_M2_CACHE="false"
+  if [ ! -f ${BUILD_DIR}/system.properties ]; then 
+    echo "java.runtime.version=1.6" > ${BUILD_DIR}/system.properties; 
+  fi
+elif [ -f $CACHE_DIR/removeM2Cache ]; then
+  KEEP_M2_CACHE="false"
 fi
 
 if [ "true" == $KEEP_M2_CACHE ]; then
@@ -41,6 +48,7 @@ fi
 #create the cache dir if it doesn't exist
 mkdir -p $CACHE_DIR
 
+<<<<<<< HEAD
 # change to cache dir to install maven
 cd $CACHE_DIR
 
@@ -50,13 +58,21 @@ if [ "true" == ${DOWNLOAD_JDK} ]; then
   LOGGER_FLAGS="$LOGGER_FLAGS download_jdk-6"
   # echo -n "-----> Installing OpenJDK 1.6.0_25..."
   # install_java ${BUILD_DIR}
+=======
+# install JDK 
+if [ -f ${BUILD_DIR}/system.properties ]; then
+  logger -p user.notice -t "slugc[$$]" "language_pack_java download_jdk"
+  LOGGER_FLAGS="$LOGGER_FLAGS download_jdk"
+>>>>>>> upstream/master
   javaVersion=$(detect_java_version ${BUILD_DIR})
   echo -n "-----> Installing OpenJDK ${javaVersion}..."
   install_java ${BUILD_DIR} ${javaVersion}
   echo "done"
-  mkdir -p ${CACHE_DIR}/.jdk
-  touch ${CACHE_DIR}/.jdk/vendor
+  cp ${BUILD_DIR}/system.properties ${CACHE_DIR}/
 fi
+
+# change to cache dir to install maven
+cd $CACHE_DIR
 
 # install maven with base repository
 MAVEN_URL="http://devcctrl.com.packages.s3.amazonaws.com/maven.tar.gz"
