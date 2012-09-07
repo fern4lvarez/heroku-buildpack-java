@@ -59,7 +59,7 @@ fi
 cd $CACHE_DIR
 
 # install maven with base repository
-MAVEN_URL="http://s3.amazonaws.com/heroku-jvm-langpack-java/maven.tar.gz"
+MAVEN_URL="http://devcctrl.com.packages.s3.amazonaws.com/maven.tar.gz"
 
 if [ ! -d .maven ]; then
   echo -n "-----> Installing Maven 3.0.3..."
@@ -68,7 +68,7 @@ if [ ! -d .maven ]; then
   echo " done"
 fi
 
-MAVEN_SETTINGS_URL="http://s3.amazonaws.com/heroku-jvm-langpack-java/settings.xml"
+MAVEN_SETTINGS_URL="http://devcctrl.com.packages.s3.amazonaws.com/settings.xml"
 
 echo -n "-----> Installing settings.xml..."
 if [ -f .m2/settings.xml ]; then
